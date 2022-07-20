@@ -34,6 +34,10 @@ class Tags extends Page {
           'fields' => [
             'title',
           ],
+          'sortfield' => 'title',
+          'parentTemplates' => [
+            Root::tpl,
+          ],
         ],
       ],
     ]);

@@ -33,6 +33,18 @@ class RockTags extends WireData implements Module {
     $rm->initClasses(__DIR__."/classes", "RockTags");
   }
 
+  /**
+   * Get tags from given page
+   * @return PageArray
+   */
+  public function getTags($parentName, $selector = '') {
+    $parent = $this->wire->pages->get([
+      'parent' => $this->wire->pages->get("/rocktags"),
+      'name|id' => $parentName,
+    ]);
+    return $parent->children($selector);
+  }
+
   public function migrate() {
     /** @var RockMigrations $rm */
     $rm = $this->wire->modules->get('RockMigrations');
@@ -52,6 +64,15 @@ class RockTags extends WireData implements Module {
     $rm->setTemplateData(Root::tpl, [
       'childTemplates' => [Tags::tpl],
       'childNameFormat' => 'title',
+    ]);
+  }
+
+  /**
+   * @return Root
+   */
+  public function rootPage() {
+    return $this->wire->pages->get([
+      'template' => Root::tpl,
     ]);
   }
 

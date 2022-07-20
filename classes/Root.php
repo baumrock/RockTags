@@ -25,6 +25,7 @@ class Root extends Page {
           'fields' => [
             'title',
           ],
+          'noParents' => -1,
         ],
       ],
     ]);
