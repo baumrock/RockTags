@@ -37,14 +37,18 @@ class RockTags extends WireData implements Module {
     /** @var RockMigrations $rm */
     $rm = $this->wire->modules->get('RockMigrations');
 
+    // first create root
     $root = new Root();
     $root->migrate();
 
+    // then create tags and tag
     $tmp = new Tags();
     $tmp->migrate();
     $tmp = new Tag();
     $tmp->migrate();
     $rm->setParentChild(Tags::tpl, Tag::tpl, false);
+
+    // make sure that we can add tags-pages under root
     $rm->setTemplateData(Root::tpl, [
       'childTemplates' => [Tags::tpl],
       'childNameFormat' => 'title',
