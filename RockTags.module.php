@@ -47,6 +47,7 @@ class RockTags extends WireData implements Module {
     $rm->setParentChild(Tags::tpl, Tag::tpl, false);
     $rm->setTemplateData(Root::tpl, [
       'childTemplates' => [Tags::tpl],
+      'childNameFormat' => 'title',
     ]);
   }
 
