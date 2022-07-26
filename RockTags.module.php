@@ -14,7 +14,7 @@ class RockTags extends WireData implements Module {
   public static function getModuleInfo() {
     return [
       'title' => 'RockTags',
-      'version' => '1.0.0',
+      'version' => '1.0.1',
       'summary' => 'Module to quickly add a multilang tagging system to your site',
       'autoload' => true,
       'singular' => true,
@@ -31,6 +31,19 @@ class RockTags extends WireData implements Module {
     $rm = $this->wire->modules->get('RockMigrations');
     $rm->watch($this);
     $rm->initClasses(__DIR__."/classes", "RockTags");
+  }
+
+  /**
+   * Return the tag-page by name in the currently set language
+   * @return Tag
+   */
+  public function getTagByName($name, $parent = null) {
+    $prop = 'name';
+    $lang = $this->wire->user->language;
+    if(!$lang->isDefault()) $prop .= $lang;
+    $selector = [$prop => $name];
+    if($parent) $selector['parent'] = $parent;
+    return $this->wire->pages->get($selector);
   }
 
   /**
