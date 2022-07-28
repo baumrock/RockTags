@@ -18,7 +18,7 @@ class RockTags extends WireData implements Module {
       'summary' => 'Module to quickly add a multilang tagging system to your site',
       'autoload' => true,
       'singular' => true,
-      'icon' => 'filter-o',
+      'icon' => 'tags',
       'requires' => [
         'RockMigrations',
       ],
