@@ -38,6 +38,7 @@ class Tags extends Page {
           'parentTemplates' => [
             Root::tpl,
           ],
+          'noShortcut' => 1, // dont show in add new menu
         ],
       ],
     ]);

@@ -36,6 +36,7 @@ class Tag extends Page {
           'fields' => [
             'title',
           ],
+          'noShortcut' => 1, // dont show in add new menu
         ],
       ],
     ]);
