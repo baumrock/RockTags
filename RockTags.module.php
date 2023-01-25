@@ -1,4 +1,6 @@
-<?php namespace ProcessWire;
+<?php
+
+namespace ProcessWire;
 
 use RockTags\Root;
 use RockTags\Tag;
@@ -9,40 +11,45 @@ use RockTags\Tags;
  * @license Licensed under MIT
  * @link https://www.baumrock.com
  */
-class RockTags extends WireData implements Module {
+class RockTags extends WireData implements Module
+{
 
-  public static function getModuleInfo() {
+  public static function getModuleInfo()
+  {
     return [
       'title' => 'RockTags',
-      'version' => '1.0.1',
+      'version' => '1.1.0',
       'summary' => 'Module to quickly add a multilang tagging system to your site',
       'autoload' => true,
       'singular' => true,
       'icon' => 'tags',
       'requires' => [
-        'RockMigrations',
+        'RockMigrations>=2.12.0',
       ],
       'installs' => [],
     ];
   }
 
-  public function init() {
+  public function init()
+  {
     /** @var RockMigrations $rm */
     $rm = $this->wire->modules->get('RockMigrations');
     $rm->watch($this);
-    $rm->initClasses(__DIR__."/classes", "RockTags");
+    $rm->initClasses(__DIR__ . "/classes", "RockTags");
+    $this->wire('rocktags', $this);
   }
 
   /**
    * Return the tag-page by name in the currently set language
    * @return Tag
    */
-  public function getTagByName($name, $parent = null) {
+  public function getTagByName($name, $parent = null)
+  {
     $prop = 'name';
     $lang = $this->wire->user->language;
-    if(!$lang->isDefault()) $prop .= $lang;
+    if (!$lang->isDefault()) $prop .= $lang;
     $selector = [$prop => $name];
-    if($parent) $selector['parent'] = $parent;
+    if ($parent) $selector['parent'] = $parent;
     return $this->wire->pages->get($selector);
   }
 
@@ -50,7 +57,8 @@ class RockTags extends WireData implements Module {
    * Get tags from given page
    * @return PageArray
    */
-  public function getTags($parentName, $selector = '') {
+  public function getTags($parentName, $selector = '')
+  {
     $parent = $this->wire->pages->get([
       'parent' => $this->wire->pages->get("/rocktags"),
       'name|id' => $parentName,
@@ -58,7 +66,8 @@ class RockTags extends WireData implements Module {
     return $parent->children($selector);
   }
 
-  public function migrate() {
+  public function migrate()
+  {
     /** @var RockMigrations $rm */
     $rm = $this->wire->modules->get('RockMigrations');
 
@@ -83,15 +92,26 @@ class RockTags extends WireData implements Module {
   /**
    * @return Root
    */
-  public function rootPage() {
+  public function rootPage()
+  {
     return $this->wire->pages->get([
       'template' => Root::tpl,
     ]);
   }
 
-  public function ___install() {
+  /**
+   * Get all tags under given parent page
+   */
+  public function tags($parentName)
+  {
+    return $this->wire->pages->find([
+      'parent' => "/rocktags/$parentName",
+    ]);
+  }
+
+  public function ___install()
+  {
     $this->init();
     $this->migrate();
   }
-
 }
