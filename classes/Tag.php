@@ -21,7 +21,6 @@ class Tag extends Page
   {
     /** @var RockMigrations $rm */
     $rm = $this->wire->modules->get('RockMigrations');
-    $rm->watch($this, false);
     $rm->setPageNameFromTitle(self::tpl);
   }
 
